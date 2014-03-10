@@ -114,14 +114,16 @@ class LinkedList(object):
 
 	# Returns the string representation of the list
 	def __repr__(self):
-		strs='[';
+		strs='(';
 		if self.size == 0:
 			print 'The list is empty!';
 		else:
 			tmp=self.head;
 			while tmp.nextNode != None:
-				strs+=str(tmp.data)+'-->';
+				strs+=str(tmp.data)+' ';
 				tmp=tmp.nextNode;
 			strs+=str(tmp.data);
-		strs+=']';
+		strs+=')';
 		return strs;
+
+	
