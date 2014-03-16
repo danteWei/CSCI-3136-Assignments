@@ -1,0 +1,5 @@
+( define foo 42 )
+( define bar ( * 7 13 ) )
+( define x ( + 2 2 ) )
+( define y ( - 6 7 ) )
+( define z ( / 6 2 ) )

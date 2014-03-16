@@ -51,17 +51,17 @@ def div( a, b ):
   return a / b
 
 
-def do_arith_op( op, l, refEnv ):
+def do_arith_op( op, l ):
   if len( l ) < 1:
     raise EvalError( op )
 
-  r = do_eval( l[0], refEnv )
+  r = do_eval( l[0] )
   if not isinstance( r, int ):
     raise EvalError( op )
 
   r = l[0]
   for o in l[1:]:
-    i = do_eval( o, refEnv )
+    i = do_eval( o )
     if isinstance( i, int ):
       r = op( r, i )
     else:
@@ -70,25 +70,24 @@ def do_arith_op( op, l, refEnv ):
   return r
 
 
-def do_eval( a, refEnv ):
-
+def do_eval( a ):
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
 
-    op = do_eval( a[0], refEnv )
+    op = do_eval( a[0] )
 
     f = a
     a = None
 
     if op == "+":
-      a = do_arith_op( add, f[1:], refEnv )
+      a = do_arith_op( add, f[1:] )
     elif op == "-":
-      a = do_arith_op( sub, f[1:], refEnv )
+      a = do_arith_op( sub, f[1:] )
     elif op == "*":
-      a = do_arith_op( mul, f[1:], refEnv )
+      a = do_arith_op( mul, f[1:] )
     elif op == "/":
-      a = do_arith_op( div, f[1:], refEnv )
+      a = do_arith_op( div, f[1:] )
     elif op == "'":
       if len( f ) > 1:
         a = f[1]
@@ -113,8 +112,7 @@ def do_eval( a, refEnv ):
       for b in f[1:]:
         a = a + [do_eval( b )]
     elif op in procs:
-      if op == "define":
-         a = define(refEnv, f[1], f[2])
+      a = f
     else:
       raise EvalError( 'unknown proc: ' + str( op )  ) 
 
@@ -127,14 +125,6 @@ def do_eval( a, refEnv ):
   else:                    # id
     return a
 
-def let(id, atom, *args):
-   print "Hello"
-
-def define(refEnv, id, atom):
-   refEnv[1].update({id: do_eval(atom, refEnv)})
-   print "Trace this is the current reference environment:",
-   print refEnv
-   return ""
 
 def parseS():
   return parseAtoms()
@@ -212,10 +202,8 @@ def print_result( l ):
     print l,
  
 def eval_result( l ):
-  refEnv = []
-  refEnv = [refEnv, {}]
   for a in l:
-    print_result( do_eval( a, refEnv ) )
+    print_result( do_eval( a ) )
  
 try:
   l = parseS()
